@@ -3,29 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Astra Terminal | Markets & Intelligence</title>
+    <title>Astra Terminal | Financial & Tech Intel</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
     <style>
         :root {
-            --bg-color: #0b0c10;
-            --card-bg: #1f2833;
-            --accent-green: #66fcf1;
-            --text-main: #c5c6c7;
+            --bg-color: #08080a;
+            --card-bg: #111215;
+            --border-color: #1f2228;
+            --text-main: #9ea4b0;
             --text-bright: #ffffff;
-            --accent-purple: #45a29e;
-            --border-color: #2c3540;
+            --accent-green: #00e676;
+            --accent-red: #ff5252;
+            --accent-subtle: #2a2e39;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Consolas', 'Courier New', monospace;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            padding: 2rem;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -34,11 +36,11 @@
 
         header {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1200px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
         }
@@ -46,119 +48,135 @@
         .logo-section {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .status-dot {
-            width: 10px;
-            height: 10px;
-            background-color: #00ff66;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
             border-radius: 50%;
-            box-shadow: 0 0 8px #00ff66;
+            box-shadow: 0 0 10px var(--accent-green);
         }
 
         h1 {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: var(--text-bright);
             letter-spacing: 2px;
+            font-weight: 700;
         }
 
         .version-badge {
-            background: #222;
-            color: var(--accent-green);
-            padding: 2px 8px;
+            background: #18191d;
+            color: #888;
+            padding: 3px 8px;
             border-radius: 4px;
-            font-size: 0.75rem;
-            border: 1px solid var(--accent-green);
+            font-size: 0.7rem;
+            border: 1px solid var(--border-color);
+            text-transform: uppercase;
         }
 
         .social-link {
-            color: var(--accent-purple);
+            color: #888;
             text-decoration: none;
-            border: 1px solid var(--accent-purple);
-            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
             border-radius: 4px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             transition: all 0.2s ease;
+            background: #111215;
         }
 
         .social-link:hover {
-            background-color: var(--accent-purple);
-            color: #000;
+            color: #fff;
+            border-color: #444;
         }
 
-        .dashboard-grid {
+        .container {
             width: 100%;
-            max-width: 1000px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
             gap: 1.5rem;
         }
 
-        .section-title {
-            grid-column: 1 / -1;
-            font-size: 1rem;
-            color: var(--accent-green);
-            margin-top: 1rem;
-            letter-spacing: 1px;
+        .section-header {
+            font-size: 0.85rem;
+            color: #555866;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 1rem;
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 6px;
+            border-radius: 8px;
             padding: 1.2rem;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
         }
 
         .card-header {
             display: flex;
             justify-content: space-between;
-            color: #888;
-            font-size: 0.8rem;
+            align-items: center;
         }
 
-        .card-title {
-            font-size: 1.2rem;
+        .asset-title {
+            font-size: 1.1rem;
             color: var(--text-bright);
-            font-weight: bold;
+            font-weight: 600;
         }
 
-        .card-value {
-            font-size: 1.6rem;
-            color: var(--accent-green);
-            font-weight: bold;
-        }
-
-        .card-subtext {
+        .asset-sub {
             font-size: 0.75rem;
-            color: #aaa;
+            color: #555866;
         }
 
-        .badge {
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 0.7rem;
-            font-weight: bold;
+        .tradingview-widget-container {
+            height: 220px;
+            width: 100%;
+            border-radius: 6px;
+            overflow: hidden;
         }
 
-        .badge-green { background: #003311; color: #00ff66; border: 1px solid #00ff66; }
-        .badge-purple { background: #220033; color: #cc66ff; border: 1px solid #cc66ff; }
-
-        .data-row {
+        .info-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 6px 0;
-            border-bottom: 1px solid #2a3440;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
         }
 
-        .data-row:last-child { border-bottom: none; }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #666a7a;
+        }
+
+        .info-val {
+            color: var(--text-bright);
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -167,103 +185,117 @@
         <div class="logo-section">
             <div class="status-dot"></div>
             <h1>ASTRA TERMINAL</h1>
-            <span class="version-badge">v1.1 Live</span>
+            <span class="version-badge">v2.0 PRO</span>
         </div>
-        <a href="https://x.com/AstraN9ne99" target="_blank" class="social-link">Follow @AstraN9ne99</a>
+        <a href="https://x.com/AstraN9ne99" target="_blank" class="social-link">@AstraN9ne99</a>
     </header>
 
-    <div class="dashboard-grid">
+    <div class="container">
         
-        <div class="section-title">● FINANCIAL INTELLIGENCE</div>
+        <div class="section-header">/// FINANCIAL MARKETS & CRYPTO (REAL-TIME)</div>
 
-        <div class="card">
-            <div class="card-header">
-                <span>ETF / S&P 500</span>
-                <span class="badge badge-green">+0.45%</span>
+        <div class="grid-3">
+            <!-- VUAA Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="asset-title">VUAA (S&P 500)</div>
+                        <div class="asset-sub">Vanguard S&P 500 UCITS ETF</div>
+                    </div>
+                </div>
+                <div class="tradingview-widget-container">
+                    <iframe src="https://s.tradingview.com/widgetembed/?symbol=LSE%3AVUAA&interval=D&theme=dark&style=3&timezone=Etc%2FUTC" width="100%" height="220" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
+                </div>
             </div>
-            <div class="card-title">VUAA</div>
-            <div class="card-value">$102.40</div>
-            <div class="card-subtext">Vanguard S&P 500 UCITS</div>
-        </div>
 
-        <div class="card">
-            <div class="card-header">
-                <span>ETF / NASDAQ-100</span>
-                <span class="badge badge-green">+0.82%</span>
+            <!-- EQQQ Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="asset-title">EQQQ (NASDAQ-100)</div>
+                        <div class="asset-sub">Invesco NASDAQ-100 UCITS</div>
+                    </div>
+                </div>
+                <div class="tradingview-widget-container">
+                    <iframe src="https://s.tradingview.com/widgetembed/?symbol=LSE%3AEQQQ&interval=D&theme=dark&style=3&timezone=Etc%2FUTC" width="100%" height="220" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
+                </div>
             </div>
-            <div class="card-title">EQQQ</div>
-            <div class="card-value">$485.10</div>
-            <div class="card-subtext">Invesco NASDAQ-100 UCITS</div>
-        </div>
 
-        <div class="card">
-            <div class="card-header">
-                <span>CRYPTO</span>
-                <span class="badge badge-green" id="sol-change">+0.00%</span>
-            </div>
-            <div class="card-title">SOL (Solana)</div>
-            <div class="card-value" id="sol-price">Loading...</div>
-            <div class="card-subtext">Live Kraken Data</div>
-        </div>
-
-        <div class="section-title">● GAMING & TECH INTELLIGENCE</div>
-
-        <div class="card">
-            <div class="card-header">
-                <span>Grand Theft Auto Hub</span>
-                <span class="badge badge-purple">Rockstar Intel</span>
-            </div>
-            <div class="data-row">
-                <span>GTA VI Release Date</span>
-                <span style="color: var(--accent-green);">November 19, 2026</span>
-            </div>
-            <div class="data-row">
-                <span>GTA Online Status</span>
-                <span style="color: #aaa;">Weekly Refresh Active</span>
+            <!-- SOLANA Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="asset-title">SOL / USD</div>
+                        <div class="asset-sub">Solana Crypto Live Tick</div>
+                    </div>
+                </div>
+                <div class="tradingview-widget-container">
+                    <iframe src="https://s.tradingview.com/widgetembed/?symbol=KRAKEN%3ASOLUSD&interval=1&theme=dark&style=3&timezone=Etc%2FUTC" width="100%" height="220" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <span>PS5 Scene & Jailbreak Tracker</span>
-                <span class="badge badge-purple">Scene Status</span>
+        <div class="grid-2">
+            <!-- BITCOIN Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="asset-title">BTC / USD</div>
+                        <div class="asset-sub">Bitcoin Real-time</div>
+                    </div>
+                </div>
+                <div class="tradingview-widget-container">
+                    <iframe src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3ABTCUSDT&interval=1&theme=dark&style=3&timezone=Etc%2FUTC" width="100%" height="220" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
+                </div>
             </div>
-            <div class="data-row">
-                <span>Vulnerable Firmware Range</span>
-                <span style="color: #ffcc00;">FW 4.51 & Lower</span>
+
+            <!-- ETHEREUM Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="asset-title">ETH / USD</div>
+                        <div class="asset-sub">Ethereum Real-time</div>
+                    </div>
+                </div>
+                <div class="tradingview-widget-container">
+                    <iframe src="https://s.tradingview.com/widgetembed/?symbol=BINANCE%3AETHUSDT&interval=1&theme=dark&style=3&timezone=Etc%2FUTC" width="100%" height="220" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
+                </div>
             </div>
-            <div class="data-row">
-                <span>Latest Official Firmware</span>
-                <span style="color: #aaa;">FW 13.60</span>
+        </div>
+
+        <div class="section-header">/// INTELLIGENCE HUB</div>
+
+        <div class="grid-2">
+            <div class="card">
+                <div class="card-header">
+                    <div class="asset-title">Grand Theft Auto Hub</div>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">GTA VI Launch Window</span>
+                    <span class="info-val" style="color: var(--accent-green);">November 19, 2026</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Rockstar Server Network</span>
+                    <span class="info-val">Operational</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="asset-title">PS5 Scene & Exploits</div>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Vulnerable Firmwares</span>
+                    <span class="info-val" style="color: #ffb74d;">FW 4.51 & Lower</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Current PS5 System Software</span>
+                    <span class="info-val">FW 13.60</span>
+                </div>
             </div>
         </div>
 
     </div>
 
-    <script>
-        async function fetchSolanaPrice() {
-            try {
-                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd&include_24hr_change=true');
-                const data = await response.json();
-                const price = data.solana.usd;
-                const change = data.solana.usd_24h_change;
-
-                document.getElementById('sol-price').innerText = `$${price.toFixed(2)}`;
-                const changeElem = document.getElementById('sol-change');
-                changeElem.innerText = `${change >= 0 ? '+' : ''}${change.toFixed(2)}%`;
-                
-                if (change < 0) {
-                    changeElem.style.borderColor = '#ff3333';
-                    changeElem.style.color = '#ff3333';
-                    changeElem.style.backgroundColor = '#330000';
-                }
-            } catch (error) {
-                document.getElementById('sol-price').innerText = "$142.80";
-            }
-        }
-
-        fetchSolanaPrice();
-        setInterval(fetchSolanaPrice, 30000);
-    </script>
 </body>
 </html>
