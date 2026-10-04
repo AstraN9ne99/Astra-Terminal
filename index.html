@@ -171,115 +171,36 @@
             font-size: 1.1rem;
         }
 
-        /* Main Workspace & Converter */
+        /* Main Workspace */
         .main-workspace {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
 
-        .converter-container {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .code-editor-box {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .editor-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        textarea {
-            width: 100%;
-            height: 380px;
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1rem;
-            color: #34d399;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.875rem;
-            line-height: 1.5;
-            resize: vertical;
-            outline: none;
-        }
-
-        textarea:focus {
-            border-color: var(--accent-color);
-        }
-
-        .controls-column {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .btn {
-            background-color: var(--bg-tertiary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            padding: 0.6rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.2s;
-        }
-
-        .btn:hover {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
-        }
-
-        .btn-primary {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--accent-hover);
-        }
-
-        .select-control {
-            background-color: var(--bg-tertiary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            padding: 0.6rem;
-            border-radius: 6px;
-            outline: none;
-            font-size: 0.85rem;
-            cursor: pointer;
-        }
-
         /* Terminal Output Log */
+        .terminal-log-panel {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
         .terminal-log {
             background-color: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: 6px;
-            padding: 1rem;
+            padding: 1.25rem;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
-            max-height: 120px;
+            min-height: 400px;
+            flex-grow: 1;
             overflow-y: auto;
+            line-height: 1.6;
         }
 
         .log-entry {
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
         }
 
         .log-time {
@@ -298,9 +219,6 @@
             .dashboard-container {
                 grid-template-columns: 1fr;
             }
-            .converter-container {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -309,7 +227,7 @@
     <!-- Header Section -->
     <header>
         <div class="brand-container">
-            <i class="fa-solid font-awesome fa-terminal" style="color: var(--accent-color);"></i>
+            <i class="fa-solid fa-terminal" style="color: var(--accent-color);"></i>
             <span class="brand-name">ASTRA TERMINAL</span>
         </div>
         <div class="status-indicator">
@@ -346,55 +264,21 @@
 
         <!-- Main Workspace -->
         <div class="main-workspace">
-            <div class="panel">
+            <div class="panel terminal-log-panel">
                 <div class="panel-title">
-                    <i class="fa-solid fa-code"></i> Data Converter & Transformer
+                    <i class="fa-solid fa-terminal"></i> System Console & Activity Log
                 </div>
-                
-                <div class="converter-container">
-                    <!-- Input Block -->
-                    <div class="code-editor-box">
-                        <div class="editor-header">
-                            <span>Input Payload</span>
-                            <button class="btn" onclick="clearInput()"><i class="fa-solid fa-trash"></i> Clear</button>
-                        </div>
-                        <textarea id="jsonInput" placeholder="Paste JSON or XML string here..."></textarea>
-                    </div>
-
-                    <!-- Controls Block -->
-                    <div class="controls-column">
-                        <label for="conversionType" style="font-size: 0.75rem; color: var(--text-secondary);">Conversion Mode</label>
-                        <select id="conversionType" class="select-control">
-                            <option value="json2xml">JSON to XML</option>
-                            <option value="xml2json">XML to JSON</option>
-                            <option value="minify">Minify JSON</option>
-                            <option value="prettify">Prettify JSON</option>
-                        </select>
-                        <button class="btn btn-primary" onclick="processData()">
-                            <i class="fa-solid fa-arrows-rotate"></i> Convert
-                        </button>
-                    </div>
-
-                    <!-- Output Block -->
-                    <div class="code-editor-box">
-                        <div class="editor-header">
-                            <span>Formatted Output</span>
-                            <button class="btn" onclick="copyOutput()"><i class="fa-solid fa-copy"></i> Copy</button>
-                        </div>
-                        <textarea id="jsonOutput" readonly placeholder="Output payload will appear here..."></textarea>
-                    </div>
+                <div class="terminal-log" id="terminalLog">
+                    <div class="log-entry"><span class="log-time">[SYSTEM]</span> Astra Terminal initialised successfully.</div>
+                    <div class="log-entry"><span class="log-time">[SYSTEM]</span> Network connection established. Status: <span class="log-success">ONLINE</span></div>
+                    <div class="log-entry"><span class="log-time">[SYSTEM]</span> All modules loaded without errors.</div>
                 </div>
-            </div>
-
-            <!-- System Logs -->
-            <div class="terminal-log" id="terminalLog">
-                <div class="log-entry"><span class="log-time">[SYSTEM]</span> Astra Terminal initialised successfully.</div>
             </div>
         </div>
 
     </div>
 
-    <!-- Conversion & Core Utilities Script -->
+    <!-- Script -->
     <script>
         function logMessage(msg, type = 'normal') {
             const logContainer = document.getElementById('terminalLog');
@@ -410,116 +294,7 @@
             logContainer.appendChild(logEntry);
             logContainer.scrollTop = logContainer.scrollHeight;
         }
-
-        // XML to JSON & JSON to XML Helpers
-        function jsonToXml(obj, nodeName = 'root') {
-            let xml = '';
-            if (typeof obj === 'object' && obj !== null) {
-                for (let prop in obj) {
-                    if (obj.hasOwnProperty(prop)) {
-                        if (Array.isArray(obj[prop])) {
-                            obj[prop].forEach(item => {
-                                xml += jsonToXml(item, prop);
-                            });
-                        } else if (typeof obj[prop] === 'object') {
-                            xml += jsonToXml(obj[prop], prop);
-                        } else {
-                            xml += `<${prop}>${obj[prop]}</${prop}>`;
-                        }
-                    }
-                }
-            } else {
-                xml += obj;
-            }
-            return `<${nodeName}>${xml}</${nodeName}>`;
-        }
-
-        function xmlToJson(xml) {
-            let obj = {};
-            if (xml.nodeType === 1) { // element
-                if (xml.attributes.length > 0) {
-                    obj["@attributes"] = {};
-                    for (let j = 0; j < xml.attributes.length; j++) {
-                        let attribute = xml.attributes.item(j);
-                        obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
-                    }
-                }
-            } else if (xml.nodeType === 3) { // text
-                obj = xml.nodeValue.trim();
-            }
-
-            if (xml.hasChildNodes()) {
-                for (let i = 0; i < xml.childNodes.length; i++) {
-                    let item = xml.childNodes.item(i);
-                    let nodeName = item.nodeName;
-                    if (nodeName === "#text") {
-                        let text = item.nodeValue.trim();
-                        if (text !== "") return text;
-                        continue;
-                    }
-                    if (typeof (obj[nodeName]) == "undefined") {
-                        obj[nodeName] = xmlToJson(item);
-                    } else {
-                        if (typeof (obj[nodeName].push) == "undefined") {
-                            let old = obj[nodeName];
-                            obj[nodeName] = [];
-                            obj[nodeName].push(old);
-                        }
-                        obj[nodeName].push(xmlToJson(item));
-                    }
-                }
-            }
-            return obj;
-        }
-
-        function processData() {
-            const input = document.getElementById('jsonInput').value.trim();
-            const output = document.getElementById('jsonOutput');
-            const mode = document.getElementById('conversionType').value;
-
-            if (!input) {
-                logMessage("Input payload is empty.", "error");
-                return;
-            }
-
-            try {
-                if (mode === "json2xml") {
-                    const parsedJson = JSON.parse(input);
-                    const xmlResult = jsonToXml(parsedJson);
-                    output.value = xmlResult;
-                    logMessage("Successfully converted JSON to XML.", "success");
-                } else if (mode === "xml2json") {
-                    const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(input, "text/xml");
-                    const jsonResult = xmlToJson(xmlDoc);
-                    output.value = JSON.stringify(jsonResult, null, 2);
-                    logMessage("Successfully converted XML to JSON.", "success");
-                } else if (mode === "prettify") {
-                    const parsed = JSON.parse(input);
-                    output.value = JSON.stringify(parsed, null, 4);
-                    logMessage("JSON Prettified successfully.", "success");
-                } else if (mode === "minify") {
-                    const parsed = JSON.parse(input);
-                    output.value = JSON.stringify(parsed);
-                    logMessage("JSON Minified successfully.", "success");
-                }
-            } catch (err) {
-                logMessage("Parsing error: " + err.message, "error");
-            }
-        }
-
-        function clearInput() {
-            document.getElementById('jsonInput').value = '';
-            document.getElementById('jsonOutput').value = '';
-            logMessage("Editors cleared.");
-        }
-
-        function copyOutput() {
-            const output = document.getElementById('jsonOutput');
-            if (!output.value) return;
-            navigator.clipboard.writeText(output.value);
-            logMessage("Output copied to clipboard.", "success");
-        }
     </script>
 </body>
 </html>
+
