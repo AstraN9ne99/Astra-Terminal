@@ -607,68 +607,91 @@
             document.getElementById(id).style.display = show ? 'flex' : 'none';
         }
 
-        // 3. PS5 EXPLOIT AUTHENTICATOR & VERIFIER LOGIC
+        // Enter Key Listener για το PS5 Input
+        document.getElementById('exploit-url')?.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') verifyPS5Exploit();
+        });
+
+        // 3. SECURE PS5 EXPLOIT AUTHENTICATOR & VERIFIER
         function verifyPS5Exploit() {
-            const input = document.getElementById('exploit-url').value.trim().toLowerCase();
+            let rawInput = document.getElementById('exploit-url').value.trim();
             const resultDiv = document.getElementById('ps5-result');
             
-            if (!input) {
+            if (!rawInput) {
                 resultDiv.style.display = 'block';
                 resultDiv.innerHTML = '<span style="color:var(--danger)">✕ Please enter a URL or Domain to verify.</span>';
                 return;
             }
 
-            // Trusted Repositories & Verified Hosts
-            const trustedDomains = [
-                'github.com/specterdev',
-                'github.com/sleirsgoevy',
-                'github.com/idlesauce',
-                'github.com/alazif',
-                'github.com/echostretch',
-                'github.com/lightningmods',
-                'github.com/zecoxao',
+            if (!rawInput.startsWith('http://') && !rawInput.startsWith('https://')) {
+                rawInput = 'https://' + rawInput;
+            }
+
+            let parsedURL;
+            try {
+                parsedURL = new URL(rawInput);
+            } catch (e) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<span style="color:var(--danger)">✕ Invalid URL format.</span>';
+                return;
+            }
+
+            const hostname = parsedURL.hostname.toLowerCase();
+            const pathname = parsedURL.pathname.toLowerCase();
+            const fullPath = (hostname + pathname).toLowerCase();
+
+            const trustedExactDomains = [
                 'es7in.github.io',
                 'kameleon.github.io',
                 'wololo.net',
                 'playstationlifestyle.net'
             ];
 
-            // Scam & Fake Indicators
-            const fakeKeywords = [
-                '.exe', '.msi', '.apk', 'password', 'survey', 'human-verification',
-                'human verification', 'free-download.rar', 'jailbreak-14.', 'jailbreak-15.',
-                'online-generator', 'activation-code'
+            const trustedGithubUsers = [
+                'specterdev', 'sleirsgoevy', 'idlesauce', 
+                'alazif', 'echostretch', 'lightningmods', 'zecoxao'
             ];
 
-            let isScam = fakeKeywords.some(keyword => input.includes(keyword));
-            let isTrusted = trustedDomains.some(domain => input.includes(domain));
+            const dangerousExtensions = ['.exe', '.msi', '.apk', '.bat', '.scr', '.zip', '.rar'];
+            const scamKeywords = ['human-verification', 'human verification', 'online-generator', 'activation-code', 'survey'];
+
+            const hasDangerousExt = dangerousExtensions.some(ext => pathname.endsWith(ext));
+            const hasScamKeyword = scamKeywords.some(kw => fullPath.includes(kw));
+
+            let isTrustedGithub = false;
+            if (hostname === 'github.com' || hostname === 'www.github.com') {
+                const pathParts = pathname.split('/').filter(p => p.length > 0);
+                if (pathParts.length > 0 && trustedGithubUsers.includes(pathParts[0])) {
+                    isTrustedGithub = true;
+                }
+            }
+
+            let isTrustedDomain = trustedExactDomains.some(domain => hostname === domain || hostname.endsWith('.' + domain));
 
             resultDiv.style.display = 'block';
 
-            if (isScam) {
+            if (hasDangerousExt || hasScamKeyword) {
                 resultDiv.innerHTML = `
                     <div style="color:var(--danger); font-weight:bold; font-size:0.95rem;">🚨 VERDICT: 100% FAKE / SCAM / MALWARE</div>
                     <p style="margin-top:6px; color:var(--text-muted)">
-                        <strong>Reasoning:</strong> The link contains dangerous patterns (such as .exe files, survey requests, or fake jailbreak claims on FW 14+). 
-                        <br><span style="color:#fff">⚠️ Do not download or execute any files!</span>
+                        <strong>Reasoning:</strong> Detected dangerous file extensions (${dangerousExtensions.join(', ')}) or scam patterns.
+                        <br><span style="color:#fff">⚠️ Do NOT download or execute executable files for PS5 exploits!</span>
                     </p>
                 `;
-            } else if (isTrusted) {
+            } else if (isTrustedGithub || isTrustedDomain) {
                 resultDiv.innerHTML = `
                     <div style="color:var(--accent-green); font-weight:bold; font-size:0.95rem;">✓ VERDICT: VERIFIED LEGIT & SAFE</div>
                     <p style="margin-top:6px; color:var(--text-muted)">
-                        <strong>Reasoning:</strong> The domain belongs to an official/known developer repo or a verified PS5 Scene host.
-                        <br><span style="color:var(--accent-green)">● Status: Safe to use.</span>
+                        <strong>Reasoning:</strong> Host matched verified developer repository (<strong>${hostname}</strong>).
+                        <br><span style="color:var(--accent-green)">● Status: Authentic Host / Developer Repo.</span>
                     </p>
                 `;
             } else {
                 resultDiv.innerHTML = `
                     <div style="color:var(--warning); font-weight:bold; font-size:0.95rem;">⚠️ VERDICT: UNVERIFIED / PROCEED WITH CAUTION</div>
                     <p style="margin-top:6px; color:var(--text-muted)">
-                        <strong>Reasoning:</strong> The link is not in the list of official verified developers, but contains no immediate known malware.
-                        <br><strong>Security Guidelines:</strong>
-                        <br>• PS5 exploits are <u>strictly WebKit (.html) or BD-J/Payload (.bin, .elf)</u>.
-                        <br>• If it asks you to download `.exe` or enter a code via `.zip`, it is 100% FAKE!
+                        <strong>Reasoning:</strong> Domain (<code>${hostname}</code>) is not in the trusted developer whitelist.
+                        <br><strong>Security Guidelines:</strong> PS5 exploits run exclusively via WebKit (.html) or BD-J/Payloads (.bin, .elf). Never run executable installers.
                     </p>
                 `;
             }
@@ -710,20 +733,27 @@
                 const input = document.getElementById('json-input').value;
                 if (!input.trim()) return showJSONStatus('Please enter JSON data', 'error');
                 let obj = JSON.parse(input);
+                
+                if (typeof obj !== 'object' || obj === null) {
+                    return showJSONStatus('JSON must be an Object or Array', 'error');
+                }
                 if (!Array.isArray(obj)) obj = [obj];
-                if (obj.length === 0) return showJSONStatus('JSON is empty', 'error');
-                
-                const headers = Object.keys(obj[0]);
+                if (obj.length === 0) return showJSONStatus('JSON array is empty', 'error');
+
+                const headers = Array.from(new Set(obj.flatMap(item => typeof item === 'object' && item !== null ? Object.keys(item) : [])));
+                if (headers.length === 0) return showJSONStatus('No primitive key-value pairs found for CSV headers', 'error');
+
                 const csvRows = [headers.join(',')];
-                
+
                 for (const row of obj) {
                     const values = headers.map(header => {
-                        const val = row[header] === undefined || row[header] === null ? '' : row[header];
-                        return `"${String(val).replace(/"/g, '""')}"`;
+                        const val = row && row[header] !== undefined && row[header] !== null ? row[header] : '';
+                        const strVal = typeof val === 'object' ? JSON.stringify(val) : String(val);
+                        return `"${strVal.replace(/"/g, '""')}"`;
                     });
                     csvRows.push(values.join(','));
                 }
-                
+
                 document.getElementById('json-output').value = csvRows.join('\n');
                 showJSONStatus('✓ Conversion to CSV successful!', 'success');
             } catch (e) {
@@ -745,8 +775,16 @@
         function copyOutput() {
             const output = document.getElementById('json-output');
             if (!output.value) return showJSONStatus('No content to copy', 'error');
-            navigator.clipboard.writeText(output.value);
-            showJSONStatus('✓ Copied to Clipboard!', 'success');
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(output.value)
+                    .then(() => showJSONStatus('✓ Copied to Clipboard!', 'success'))
+                    .catch(err => showJSONStatus('✕ Copy failed: ' + err, 'error'));
+            } else {
+                output.select();
+                document.execCommand('copy');
+                showJSONStatus('✓ Copied to Clipboard (Fallback)!', 'success');
+            }
         }
 
         function clearAllJSON() {
